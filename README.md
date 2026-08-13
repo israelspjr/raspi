@@ -35,6 +35,12 @@ python3 -m venv .venv
 
 As teclas `1 2 3 4 5 6 7 8 9 0` representam as dez botoeiras. O backend é a autoridade da rodada e transmite eventos por WebSocket.
 
+## Administrativo de músicas
+
+Acesse `http://IP_DO_RASPBERRY:8000/inserir_musica`. Informe título, artista e MP3. No modo automático, o Python usa detecção de ataques e energia cromática para gerar tempos e escolher uma das dez notas. É possível selecionar dificuldade, limitar a quantidade de notas e corrigir a tabela gerada antes dos testes físicos. A música passa a aparecer imediatamente na seleção do jogo.
+
+Em gravações comerciais completas, a análise é uma aproximação para gameplay: voz, bateria e instrumentos se sobrepõem. A confiança de cada nota ajuda a localizar eventos que provavelmente precisam de ajuste manual.
+
 ## Adicionar música
 
 Copie `songs/demo`, altere o `chart.json` e use tempos em milissegundos. O número do botão vai de `0` a `9`. Um arquivo de áudio poderá ser colocado na mesma pasta e referenciado pelo campo `audio` numa próxima etapa de sincronização.

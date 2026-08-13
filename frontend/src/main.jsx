@@ -11,6 +11,7 @@ function App(){
   const [score,setScore]=useState(0), [combo,setCombo]=useState(0);
   const [status,setStatus]=useState("Escolha uma música"), [result,setResult]=useState(null);
   const ws=useRef(null);
+  const audio=useRef(new Audio());
 
   const paint=(button,color)=>setLights(old=>old.map((v,i)=>i===button?color:v));
   const press=(button)=>{ if(ws.current?.readyState===1) ws.current.send(JSON.stringify({type:"press",button})); };
@@ -21,19 +22,21 @@ function App(){
     socket.onmessage=({data})=>{
       const m=JSON.parse(data);
       if(m.type==="countdown") setStatus(String(m.value));
-      if(m.type==="started"){setStatus("VALENDO!"); setScore(0); setCombo(0); setResult(null)}
+      if(m.type==="started"){setStatus("VALENDO!"); setScore(0); setCombo(0); setResult(null); if(m.audio){audio.current.src=m.audio;audio.current.currentTime=0;audio.current.muted=false;audio.current.play().catch(()=>setStatus("ÁUDIO BLOQUEADO PELO NAVEGADOR"))}}
       if(m.type==="note") paint(m.button,"blue");
       if(m.type==="note_off") paint(m.button,"off");
       if(m.type==="feedback" && m.result==="hit"){paint(m.button,"green");setScore(m.score);setCombo(m.combo);setStatus(`+${m.points}`)}
       if(m.type==="feedback" && m.result==="wrong"){paint(m.button,"red");setStatus("BOTÃO ERRADO")}
       if(m.type==="feedback" && m.result==="miss"){paint(m.button,"red");setCombo(0);setStatus("PERDEU A NOTA")}
-      if(m.type==="finished"){setLights(Array(10).fill("off"));setStatus("RODADA FINALIZADA");setResult(m)}
+      if(m.type==="finished"){audio.current.pause();setLights(Array(10).fill("off"));setStatus("RODADA FINALIZADA");setResult(m)}
+      if(m.type==="stopped") audio.current.pause();
     };
     const keydown=e=>{const i=KEYS.indexOf(e.key); if(i>=0 && !e.repeat) press(i)};
     addEventListener("keydown",keydown); return()=>{removeEventListener("keydown",keydown);socket.close()};
   },[]);
 
-  const start=()=>ws.current?.send(JSON.stringify({type:"start",song:selected}));
+  const start=()=>{const song=songs.find(item=>item.id===selected);if(song?.audio){audio.current.src=song.audio;audio.current.muted=true;audio.current.play().catch(()=>{});}ws.current?.send(JSON.stringify({type:"start",song:selected}))};
+  if(location.pathname==="/inserir_musica") return <Admin songs={songs} reload={()=>fetch("/api/songs").then(r=>r.json()).then(setSongs)}/>;
   return <main>
     <header><div><small>RASPBERRY PI 5</small><h1>DESAFIO MUSICAL</h1></div><div className="score"><span>PONTOS</span><b>{score}</b><span>COMBO × {combo}</span></div></header>
     <section className="panel">
@@ -43,8 +46,41 @@ function App(){
     <div className="status">{status}</div>
     <section className="buttons">{NOTES.map((note,i)=><button key={note} className={`music ${lights[i]}`} onPointerDown={()=>press(i)}><span>{KEYS[i]}</span><b>{note}</b></button>)}</section>
     {result&&<section className="result"><h2>Resultado</h2><b>{result.score} pontos</b><p>{result.hits} acertos · {result.misses} erros · {result.total} notas</p></section>}
-    <footer>Modo simulador: use as teclas 1 a 0</footer>
+    <footer>Modo simulador: use as teclas 1 a 0 · <a href="/inserir_musica">Administrar músicas</a></footer>
+  </main>
+}
+
+function Admin({songs,reload}){
+  const example=`[\n  {"time_ms": 1000, "button": 0, "note": "DO", "window_ms": 450},\n  {"time_ms": 2200, "button": 2, "note": "RE", "window_ms": 450}\n]`;
+  const [message,setMessage]=useState(""),[events,setEvents]=useState([]),[editingId,setEditingId]=useState("");
+  const submit=async e=>{
+    e.preventDefault();const form=e.currentTarget;setMessage("Analisando o MP3. Isso pode levar alguns minutos no Raspberry...");
+    const response=await fetch("/api/songs",{method:"POST",body:new FormData(form)});
+    const data=await response.json();
+    if(!response.ok){setMessage(data.detail||"Falha no envio");return}
+    setMessage(`Música “${data.song.title}” adicionada com ${data.events.length} notas.`);setEvents(data.events);setEditingId(data.song.id);form.reset();reload();
+  };
+  const editSong=async id=>{const data=await fetch(`/api/songs/${id}`).then(r=>r.json());setEvents(data.events||[]);setEditingId(id);setMessage(`Editando ${data.title}`)};
+  const updateEvent=(index,key,value)=>setEvents(old=>old.map((event,i)=>i===index?{...event,[key]:Number(value)}:event));
+  const removeEvent=index=>setEvents(old=>old.filter((_,i)=>i!==index));
+  const saveChart=async()=>{const response=await fetch(`/api/songs/${editingId}/chart`,{method:"PUT",headers:{"Content-Type":"application/json"},body:JSON.stringify(events)});const data=await response.json();setMessage(response.ok?`Mapa salvo com ${data.events.length} notas.`:(data.detail||"Erro ao salvar"));reload()};
+  return <main className="admin">
+    <header><div><small>ADMINISTRATIVO</small><h1>INSERIR MÚSICA</h1></div><a className="back" href="/">← Voltar ao jogo</a></header>
+    <section className="adminGrid">
+      <form className="upload" onSubmit={submit}>
+        <label>TÍTULO</label><input name="title" required placeholder="Nome da música"/>
+        <label>ARTISTA</label><input name="artist" placeholder="Nome do artista"/>
+        <label>ARQUIVO MP3</label><input name="audio" type="file" accept="audio/mpeg,.mp3" required/>
+        <label>GERAÇÃO DO MAPA</label><select name="generation_mode" defaultValue="automatic"><option value="automatic">Automática pelo Python</option><option value="manual">Colar mapa JSON</option></select>
+        <label>DIFICULDADE</label><select name="difficulty" defaultValue="medium"><option value="easy">Fácil — menos notas</option><option value="medium">Média</option><option value="hard">Difícil — mais notas</option></select>
+        <label>MÁXIMO DE NOTAS</label><input name="max_notes" type="number" min="10" max="2000" defaultValue="350"/>
+        <details><summary>Mapa manual (opcional)</summary><textarea name="chart_json" defaultValue={example}/></details>
+        <p className="hint">O Python detecta ataques e escolhe a nota cromática predominante. Depois você pode corrigir cada tempo e botão na tabela.</p>
+        <button className="start">SALVAR E PROCESSAR</button><strong className="message">{message}</strong>
+      </form>
+      <section className="songList"><h2>Músicas cadastradas</h2>{songs.map(s=><article key={s.id}><b>{s.title}</b><span>{s.artist||"Sem artista"} · {s.event_count} notas</span><button onClick={()=>editSong(s.id)}>Ver/editar notas</button></article>)}</section>
+    </section>
+    {events.length>0&&<section className="chartEditor"><div className="editorTitle"><h2>Notas e tempos gerados</h2><button className="start" onClick={saveChart}>SALVAR AJUSTES</button></div><div className="tableWrap"><table><thead><tr><th>#</th><th>Tempo (ms)</th><th>Botão</th><th>Nota</th><th>Janela</th><th>Confiança</th><th></th></tr></thead><tbody>{events.map((event,i)=><tr key={i}><td>{i+1}</td><td><input type="number" value={event.time_ms} onChange={e=>updateEvent(i,"time_ms",e.target.value)}/></td><td><input type="number" min="0" max="9" value={event.button} onChange={e=>updateEvent(i,"button",e.target.value)}/></td><td>{NOTES[event.button]||event.note}</td><td><input type="number" value={event.window_ms||430} onChange={e=>updateEvent(i,"window_ms",e.target.value)}/></td><td>{event.confidence??"—"}</td><td><button className="remove" onClick={()=>removeEvent(i)}>×</button></td></tr>)}</tbody></table></div></section>}
   </main>
 }
 createRoot(document.getElementById("root")).render(<App/>);
-
