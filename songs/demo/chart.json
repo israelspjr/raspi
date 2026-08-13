@@ -1,0 +1,16 @@
+{
+  "id": "demo", "title": "Escala de demonstração", "artist": "Modo de teste", "duration": 16,
+  "events": [
+    {"time_ms":1000,"button":0,"note":"DO","window_ms":450},
+    {"time_ms":2200,"button":1,"note":"DO_SUSTENIDO","window_ms":450},
+    {"time_ms":3400,"button":2,"note":"RE","window_ms":450},
+    {"time_ms":4600,"button":3,"note":"RE_SUSTENIDO","window_ms":450},
+    {"time_ms":5800,"button":4,"note":"MI","window_ms":450},
+    {"time_ms":7000,"button":5,"note":"FA","window_ms":450},
+    {"time_ms":8200,"button":6,"note":"FA_SUSTENIDO","window_ms":450},
+    {"time_ms":9400,"button":7,"note":"SOL","window_ms":450},
+    {"time_ms":10600,"button":8,"note":"LA","window_ms":450},
+    {"time_ms":11800,"button":9,"note":"SI","window_ms":450}
+  ]
+}
+
