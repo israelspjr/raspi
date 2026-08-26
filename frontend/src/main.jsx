@@ -46,7 +46,7 @@ function App(){
     <div className="status">{status}</div>
     <section className="buttons">{NOTES.map((note,i)=><button key={note} className={`music ${lights[i]}`} onPointerDown={()=>press(i)}><span>{KEYS[i]}</span><b>{note}</b></button>)}</section>
     {result&&<section className="result"><h2>Resultado</h2><b>{result.score} pontos</b><p>{result.hits} acertos · {result.misses} erros · {result.total} notas</p></section>}
-    <footer>Modo simulador: use as teclas 1 a 0 · <a href="/inserir_musica">Administrar músicas</a></footer>
+    <footer>Painel físico ativo · teclas 1 a 0 para teste · <a href="/inserir_musica">Administrar músicas</a></footer>
   </main>
 }
 

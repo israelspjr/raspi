@@ -4,6 +4,7 @@ import json
 import re
 import shutil
 import asyncio
+from contextlib import asynccontextmanager
 from pathlib import Path
 
 from fastapi import Body, FastAPI, File, Form, HTTPException, UploadFile, WebSocket, WebSocketDisconnect
@@ -12,13 +13,14 @@ from fastapi.staticfiles import StaticFiles
 
 from .game import GameEngine
 from .analyzer import NOTES, analyze_audio
+from .hardware import HardwareController
 
 ROOT = Path(__file__).resolve().parents[1]
 SONGS = ROOT / "songs"
 WEB = ROOT / "frontend" / "dist"
 
-app = FastAPI(title="Jogo Musical Raspberry")
 clients: set[WebSocket] = set()
+hardware = HardwareController()
 
 
 def load_songs() -> list[dict]:
@@ -31,6 +33,7 @@ def load_songs() -> list[dict]:
 
 
 async def broadcast(message: dict) -> None:
+    await hardware.apply_game_message(message)
     dead = []
     for client in clients:
         try:
@@ -43,9 +46,22 @@ async def broadcast(message: dict) -> None:
 engine = GameEngine(broadcast)
 
 
+@asynccontextmanager
+async def lifespan(_app: FastAPI):
+    await hardware.start(engine.press)
+    try:
+        yield
+    finally:
+        await engine.stop()
+        await hardware.close()
+
+
+app = FastAPI(title="Jogo Musical Raspberry", lifespan=lifespan)
+
+
 @app.get("/api/health")
 def health():
-    return {"ok": True, "mode": "simulator"}
+    return {"ok": True, **hardware.status()}
 
 
 @app.get("/api/songs")

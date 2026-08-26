@@ -35,6 +35,9 @@ class GameEngine:
             except asyncio.CancelledError:
                 pass
         self.task = None
+        self.current_event = None
+        self.already_pressed = False
+        await self.send({"type": "all_off"})
 
     async def press(self, button: int) -> None:
         if not self.active or not self.current_event or self.already_pressed:
@@ -82,7 +85,9 @@ class GameEngine:
             if not self.already_pressed:
                 self.combo = 0
                 self.misses += 1
+                self.already_pressed = True
                 await self.send({"type": "feedback", "result": "miss", "button": event["button"]})
+                await asyncio.sleep(0.18)
             await self.send({"type": "note_off", "button": event["button"]})
             self.current_event = None
 
@@ -91,4 +96,3 @@ class GameEngine:
             "type": "finished", "score": self.score, "hits": self.hits,
             "misses": self.misses, "total": len(song["events"]),
         })
-

@@ -1,14 +1,20 @@
 [Unit]
 Description=Jogo Musical Raspberry Pi
-After=network.target
+After=local-fs.target network.target
 
 [Service]
 Type=simple
 User=__USER__
+SupplementaryGroups=gpio spi
 WorkingDirectory=__APP_DIR__
+EnvironmentFile=-/etc/default/music-game
+Environment=PYTHONUNBUFFERED=1
+Environment=GPIOZERO_PIN_FACTORY=lgpio
 ExecStart=__APP_DIR__/.venv/bin/uvicorn backend.main:app --host 0.0.0.0 --port 8000
 Restart=always
 RestartSec=3
+TimeoutStopSec=10
+KillSignal=SIGINT
 
 [Install]
 WantedBy=multi-user.target

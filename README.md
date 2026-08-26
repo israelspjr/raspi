@@ -1,12 +1,79 @@
-# Jogo Musical Raspberry Pi 5
+# Jogo Musical — Raspberry Pi 5
 
-Jogo offline inspirado em Guitar Hero, com 10 botoeiras e LEDs bicolores. Esta primeira versão usa teclado ou toque para simular o hardware.
+Jogo offline inspirado em Guitar Hero para um painel de parede com 10 botoeiras
+arcade e 10 anéis WS2812B de 12 pixels. A música dispara um anel; o participante
+precisa apertar a botoeira correspondente dentro da janela de acerto. O backend
+calcula acertos, erros, combo e pontuação.
 
-## Instalação no Raspberry
+O frontend React já está compilado em `frontend/dist`. O Raspberry não precisa
+executar Node.js: o serviço permanente é Python/FastAPI.
 
-O primeiro provisionamento precisa de acesso temporário à internet para o `apt` e o `pip`. Depois da instalação, o jogo funciona totalmente offline. O frontend React já está compilado em `frontend/dist`, portanto Node.js não é necessário no Raspberry.
+## Mapa elétrico usado pelo aplicativo
 
-Após copiar ou clonar o projeto:
+### Anéis WS2812B
+
+- GPIO10/MOSI, pino físico 19 → entrada 1A (pino 1) do SN7407.
+- Saída 1Y (pino 2) do SN7407 → resistor de 330–500 ohms → DI laranja do anel 1.
+- DO do anel 1 → DI do anel 2, repetindo até o anel 10.
+- Amarelo de cada anel → 5 V da fonte externa, em paralelo.
+- Verde de cada anel → GND da fonte externa, em paralelo.
+- GND da fonte externa, GND do Raspberry e pino 7 do SN7407 unidos.
+- Pino 14 do SN7407 → 5 V; resistor pull-up de 1 kohm entre pinos 2 e 14.
+
+Os anéis ocupam os pixels nesta ordem:
+
+| Anel/botoeira | Pixels na cadeia |
+| --- | --- |
+| 1 | 0–11 |
+| 2 | 12–23 |
+| 3 | 24–35 |
+| 4 | 36–47 |
+| 5 | 48–59 |
+| 6 | 60–71 |
+| 7 | 72–83 |
+| 8 | 84–95 |
+| 9 | 96–107 |
+| 10 | 108–119 |
+
+### Botoeiras
+
+Um terminal de cada botoeira vai ao GPIO indicado e o outro vai ao GND comum.
+O programa usa pull-up interno: solta = nível alto; pressionada = GND.
+
+| Botoeira | GPIO BCM | Pino físico |
+| --- | ---: | ---: |
+| 1 | 17 | 11 |
+| 2 | 27 | 13 |
+| 3 | 22 | 15 |
+| 4 | 5 | 29 |
+| 5 | 6 | 31 |
+| 6 | 26 | 37 |
+| 7 | 16 | 36 |
+| 8 | 25 | 22 |
+| 9 | 18 | 12 |
+| 10 | 12 | 32 |
+
+Correção importante da planilha recebida: os pinos físicos 24 e 26 são GPIO8
+(CE0) e GPIO7 (CE1), reservados pelo SPI0. Além disso, GPIO16 já estava atribuído
+à botoeira 7. Por isso a botoeira 9 deve usar GPIO18/pino 12, e a botoeira 10 foi
+definida no GPIO12/pino 32. Se a fiação for modificada, altere somente
+`BUTTON_GPIOS_BCM` em `/etc/default/music-game`.
+
+## Comportamento dos anéis
+
+- Azul: botoeira aguardando o toque.
+- Verde: acerto.
+- Vermelho: botão errado ou nota perdida.
+- Apagado: sem evento ativo.
+
+O brilho padrão está limitado a 25% em `/etc/default/music-game`. Isso reduz o
+consumo e o ofuscamento, mas não elimina a necessidade da fonte externa de 5 V,
+GND comum, distribuição em paralelo e proteção adequada.
+
+## Instalação e serviço automático
+
+O primeiro provisionamento precisa de internet para `apt` e `pip`. Depois, o
+jogo funciona offline. Copie o projeto para o Raspberry e execute:
 
 ```bash
 cd raspi-music-game
@@ -14,41 +81,51 @@ chmod +x scripts/install_raspberry.sh
 ./scripts/install_raspberry.sh
 ```
 
-Abra `http://localhost:8000`. Em outro computador da rede, use `http://IP_DO_RASPBERRY:8000`.
+O instalador habilita o SPI, instala as bibliotecas do Pi 5, cria o ambiente
+Python e registra `music-game.service`. O serviço inicia no boot e reinicia
+automaticamente após falhas. Após falta de energia, basta o Raspberry voltar a
+ligar.
 
-Verificação e logs:
+Abra `http://localhost:8000`. Em outro computador da rede, use
+`http://IP_DO_RASPBERRY:8000`.
 
 ```bash
 sudo systemctl status music-game
 sudo journalctl -u music-game -f
+curl http://localhost:8000/api/health
+```
+
+O endpoint de saúde deve mostrar `"mode":"raspberry"`, 120 LEDs e a lista de
+GPIOs. Se mostrar `simulator` no Raspberry, confira o log do serviço.
+
+Após alterar a fiação em `/etc/default/music-game`:
+
+```bash
+sudo nano /etc/default/music-game
+sudo systemctl restart music-game
 ```
 
 ## Teste sem instalar o serviço
 
+Em um computador comum, o modo `auto` seleciona o simulador:
+
 ```bash
 python3 -m venv .venv
 .venv/bin/pip install -r requirements.txt
-.venv/bin/uvicorn backend.main:app --host 0.0.0.0 --port 8000
+HARDWARE_MODE=simulator .venv/bin/uvicorn backend.main:app --host 0.0.0.0 --port 8000
 ```
 
-## Controles
-
-As teclas `1 2 3 4 5 6 7 8 9 0` representam as dez botoeiras. O backend é a autoridade da rodada e transmite eventos por WebSocket.
+As teclas `1 2 3 4 5 6 7 8 9 0` simulam as dez botoeiras.
 
 ## Administrativo de músicas
 
-Acesse `http://IP_DO_RASPBERRY:8000/inserir_musica`. Informe título, artista e MP3. No modo automático, o Python usa detecção de ataques e energia cromática para gerar tempos e escolher uma das dez notas. É possível selecionar dificuldade, limitar a quantidade de notas e corrigir a tabela gerada antes dos testes físicos. A música passa a aparecer imediatamente na seleção do jogo.
+Acesse `http://IP_DO_RASPBERRY:8000/inserir_musica`. Informe título, artista e
+MP3. No modo automático, a análise detecta ataques e distribui eventos pelas dez
+botoeiras. Ela é deliberadamente voltada à jogabilidade: não precisa reproduzir
+todas as notas nem separar perfeitamente cada timbre. Depois é possível ajustar
+tempos e botoeiras na tabela.
 
-Em gravações comerciais completas, a análise é uma aproximação para gameplay: voz, bateria e instrumentos se sobrepõem. A confiança de cada nota ajuda a localizar eventos que provavelmente precisam de ajuste manual.
-
-## Adicionar música
-
-Copie `songs/demo`, altere o `chart.json` e use tempos em milissegundos. O número do botão vai de `0` a `9`. Um arquivo de áudio poderá ser colocado na mesma pasta e referenciado pelo campo `audio` numa próxima etapa de sincronização.
-
-## Próximas etapas de hardware
-
-1. Confirmar o modelo exato dos LEDs bicolores (ânodo ou cátodo comum).
-2. Confirmar botoeiras normalmente abertas e tensão dos LEDs.
-3. Definir ligação com dois MCP23017 por I²C.
-4. Implementar leitura física em `backend/hardware.py`.
-5. Calibrar debounce, latência e janela de acerto no equipamento montado.
+O mapa usa `button` de 0 a 9, correspondendo fisicamente às botoeiras 1 a 10.
+Durante a rodada, os eventos do mesmo mapa comandam simultaneamente a tela e os
+anéis físicos; as botoeiras físicas entram no mesmo cálculo de pontuação usado
+pelo teclado e pelo toque na tela.
