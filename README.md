@@ -129,3 +129,14 @@ O mapa usa `button` de 0 a 9, correspondendo fisicamente às botoeiras 1 a 10.
 Durante a rodada, os eventos do mesmo mapa comandam simultaneamente a tela e os
 anéis físicos; as botoeiras físicas entram no mesmo cálculo de pontuação usado
 pelo teclado e pelo toque na tela.
+
+v1.1
+unzip painel_guitar_hero_rpi5_hardware_servico.zip
+cd painel_guitar_hero_rpi5_hardware_servico
+chmod +x scripts/install_raspberry.sh
+./scripts/install_raspberry.sh
+
+Verificação:
+sudo systemctl status music-game
+curl http://localhost:8000/api/health
+sudo journalctl -u music-game -f
