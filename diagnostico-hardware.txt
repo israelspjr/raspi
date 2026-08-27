@@ -1,0 +1,379 @@
+
+============================================================
+DATA E IDENTIFICAÃ‡ÃƒO
+============================================================
+2026-08-27T21:07:07+01:00
+ Static hostname: raspberrypi
+       Icon name: computer
+      Machine ID: fe1607cdf723479c9ff1a1cb1e80e506
+         Boot ID: f7eb757439da41828789669f5e3cd05e
+Operating System: Debian GNU/Linux 13 (trixie)
+          Kernel: Linux 6.12.75+rpt-rpi-2712
+    Architecture: arm64
+Modelo: Raspberry Pi 5 Model B Rev 1.0
+Linux raspberrypi 6.12.75+rpt-rpi-2712 #1 SMP PREEMPT Debian 1:6.12.75-1+rpt1 (2026-03-11) aarch64 GNU/Linux
+arm64
+PRETTY_NAME="Debian GNU/Linux 13 (trixie)"
+NAME="Debian GNU/Linux"
+VERSION_ID="13"
+VERSION="13 (trixie)"
+VERSION_CODENAME=trixie
+DEBIAN_VERSION_FULL=13.4
+ID=debian
+HOME_URL="https://www.debian.org/"
+SUPPORT_URL="https://www.debian.org/support"
+BUG_REPORT_URL="https://bugs.debian.org/"
+
+============================================================
+ENERGIA, TEMPERATURA E KERNEL
+============================================================
+throttled=0x0
+temp=48.3'C
+               total        used        free      shared  buff/cache   available
+Mem:           7.9Gi       299Mi       7.5Gi        12Mi       214Mi       7.6Gi
+Swap:          2.0Gi          0B       2.0Gi
+Filesystem      Size  Used Avail Use% Mounted on
+/dev/sda2        56G  5.7G   48G  11% /
+/dev/sda2        56G  5.7G   48G  11% /
+[Thu Aug 27 20:40:50 2026] bcm2835-power bcm2835-power: Broadcom BCM2835 power domains driver
+[Thu Aug 27 20:40:50 2026] bcm2835-wdt bcm2835-wdt: Poweroff handler already present!
+[Thu Aug 27 20:40:51 2026] sdhci-brcmstb 1000fff000.mmc: Got CD GPIO
+[Thu Aug 27 20:40:51 2026] PM: genpd: Disabling unused power domains
+[Thu Aug 27 20:40:59 2026] rpi-gpiomem 107d508500.gpiomem: window base 0x107d508500 size 0x00000040
+[Thu Aug 27 20:40:59 2026] rpi-gpiomem 107d508500.gpiomem: initialised 1 regions as /dev/gpiomem1
+[Thu Aug 27 20:40:59 2026] rpi-gpiomem 107d517c00.gpiomem: window base 0x107d517c00 size 0x00000040
+[Thu Aug 27 20:40:59 2026] rpi-gpiomem 107d517c00.gpiomem: initialised 1 regions as /dev/gpiomem2
+[Thu Aug 27 20:40:59 2026] rpi-gpiomem 107d504100.gpiomem: window base 0x107d504100 size 0x00000020
+[Thu Aug 27 20:40:59 2026] rpi-gpiomem 107d504100.gpiomem: initialised 1 regions as /dev/gpiomem3
+[Thu Aug 27 20:40:59 2026] rpi-gpiomem 107d510700.gpiomem: window base 0x107d510700 size 0x00000020
+[Thu Aug 27 20:40:59 2026] rpi-gpiomem 107d510700.gpiomem: initialised 1 regions as /dev/gpiomem4
+[Thu Aug 27 20:40:59 2026] rpi-gpiomem 1f000d0000.gpiomem: window base 0x1f000d0000 size 0x00030000
+[Thu Aug 27 20:40:59 2026] rpi-gpiomem 1f000d0000.gpiomem: initialised 1 regions as /dev/gpiomem0
+
+============================================================
+SERVIÃ‡O E API
+============================================================
+● music-game.service - Jogo Musical Raspberry Pi
+     Loaded: loaded (/etc/systemd/system/music-game.service; enabled; preset: enabled)
+     Active: active (running) since Thu 2026-08-27 21:00:40 BST; 6min ago
+ Invocation: d850d5ded0654464bdf09178cc4b4a96
+   Main PID: 1300 (uvicorn)
+      Tasks: 22 (limit: 9578)
+        CPU: 7.025s
+     CGroup: /system.slice/music-game.service
+             └─1300 /home/user/raspi-music-game/.venv/bin/python3 /home/user/raspi-music-game/.venv/bin/uvicorn backend.main:app --host 0.0.0.0 --port 8000
+
+Aug 27 21:00:40 raspberrypi systemd[1]: Started music-game.service - Jogo Musical Raspberry Pi.
+Aug 27 21:00:40 raspberrypi uvicorn[1300]: INFO:     Started server process [1300]
+Aug 27 21:00:40 raspberrypi uvicorn[1300]: INFO:     Waiting for application startup.
+Aug 27 21:00:40 raspberrypi uvicorn[1300]: INFO:     Application startup complete.
+Aug 27 21:00:40 raspberrypi uvicorn[1300]: INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+ExecStart={ path=/home/user/raspi-music-game/.venv/bin/uvicorn ; argv[]=/home/user/raspi-music-game/.venv/bin/uvicorn backend.main:app --host 0.0.0.0 --port 8000 ; ignore_errors=no ; start_time=[Thu 2026-08-27 21:00:40 BST] ; stop_time=[n/a] ; pid=1300 ; code=(null) ; status=0/0 }
+Environment=PYTHONUNBUFFERED=1 GPIOZERO_PIN_FACTORY=lgpio
+EnvironmentFiles=/etc/default/music-game (ignore_errors=yes)
+WorkingDirectory=/home/user/raspi-music-game
+User=user
+Group=
+SupplementaryGroups=gpio spi
+
+Resposta de /api/health:
+{"ok":true,"mode":"raspberry","ring_count":10,"leds_per_ring":12,"total_leds":120,"button_gpios_bcm":[17,27,22,5,6,26,16,25,18,12],"spi_device":"/dev/spidev0.0"}
+
+============================================================
+CONFIGURAÃ‡ÃƒO DO HARDWARE
+============================================================
+HARDWARE_MODE=auto
+BUTTON_GPIOS_BCM=17,27,22,5,6,26,16,25,18,12
+BUTTON_DEBOUNCE=0.04
+RING_COUNT=10
+LEDS_PER_RING=12
+SPI_DEVICE=/dev/spidev0.0
+SPI_SPEED_KHZ=800
+LED_BRIGHTNESS=0.25
+
+============================================================
+LOGS DO SERVIÃ‡O
+============================================================
+2026-08-27T20:59:21+01:00 raspberrypi uvicorn[1259]:     super().__init__(
+2026-08-27T20:59:21+01:00 raspberrypi uvicorn[1259]:     ~~~~~~~~~~~~~~~~^
+2026-08-27T20:59:21+01:00 raspberrypi uvicorn[1259]:         pin, pull_up=pull_up, active_state=active_state,
+2026-08-27T20:59:21+01:00 raspberrypi uvicorn[1259]:         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-27T20:59:21+01:00 raspberrypi uvicorn[1259]:         pin_factory=pin_factory)
+2026-08-27T20:59:21+01:00 raspberrypi uvicorn[1259]:         ^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-27T20:59:21+01:00 raspberrypi uvicorn[1259]:   File "/home/user/raspi-music-game/.venv/lib/python3.13/site-packages/gpiozero/mixins.py", line 243, in __init__
+2026-08-27T20:59:21+01:00 raspberrypi uvicorn[1259]:     super().__init__(*args, **kwargs)
+2026-08-27T20:59:21+01:00 raspberrypi uvicorn[1259]:     ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+2026-08-27T20:59:21+01:00 raspberrypi uvicorn[1259]:   File "/home/user/raspi-music-game/.venv/lib/python3.13/site-packages/gpiozero/input_devices.py", line 79, in __init__
+2026-08-27T20:59:21+01:00 raspberrypi uvicorn[1259]:     super().__init__(pin, pin_factory=pin_factory)
+2026-08-27T20:59:21+01:00 raspberrypi uvicorn[1259]:     ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-27T20:59:21+01:00 raspberrypi uvicorn[1259]:   File "/home/user/raspi-music-game/.venv/lib/python3.13/site-packages/gpiozero/devices.py", line 553, in __init__
+2026-08-27T20:59:21+01:00 raspberrypi uvicorn[1259]:     pin = self.pin_factory.pin(pin)
+2026-08-27T20:59:21+01:00 raspberrypi uvicorn[1259]:   File "/home/user/raspi-music-game/.venv/lib/python3.13/site-packages/gpiozero/pins/pi.py", line 413, in pin
+2026-08-27T20:59:21+01:00 raspberrypi uvicorn[1259]:     pin = self.pin_class(self, info)
+2026-08-27T20:59:21+01:00 raspberrypi uvicorn[1259]:   File "/home/user/raspi-music-game/.venv/lib/python3.13/site-packages/gpiozero/pins/lgpio.py", line 126, in __init__
+2026-08-27T20:59:21+01:00 raspberrypi uvicorn[1259]:     lgpio.gpio_claim_input(
+2026-08-27T20:59:21+01:00 raspberrypi uvicorn[1259]:     ~~~~~~~~~~~~~~~~~~~~~~^
+2026-08-27T20:59:21+01:00 raspberrypi uvicorn[1259]:         self.factory._handle, self._number, lgpio.SET_PULL_NONE)
+2026-08-27T20:59:21+01:00 raspberrypi uvicorn[1259]:         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-27T20:59:21+01:00 raspberrypi uvicorn[1259]:   File "/home/user/raspi-music-game/.venv/lib/python3.13/site-packages/lgpio.py", line 755, in gpio_claim_input
+2026-08-27T20:59:21+01:00 raspberrypi uvicorn[1259]:     return _u2i(_lgpio._gpio_claim_input(handle&0xffff, lFlags, gpio))
+2026-08-27T20:59:21+01:00 raspberrypi uvicorn[1259]:   File "/home/user/raspi-music-game/.venv/lib/python3.13/site-packages/lgpio.py", line 458, in _u2i
+2026-08-27T20:59:21+01:00 raspberrypi uvicorn[1259]:     raise error(error_text(v))
+2026-08-27T20:59:21+01:00 raspberrypi uvicorn[1259]: lgpio.error: 'GPIO busy'
+2026-08-27T20:59:21+01:00 raspberrypi uvicorn[1259]: ERROR:    Application startup failed. Exiting.
+2026-08-27T20:59:21+01:00 raspberrypi systemd[1]: music-game.service: Main process exited, code=exited, status=3/NOTIMPLEMENTED
+2026-08-27T20:59:21+01:00 raspberrypi systemd[1]: music-game.service: Failed with result 'exit-code'.
+2026-08-27T20:59:24+01:00 raspberrypi systemd[1]: music-game.service: Scheduled restart job, restart counter is at 21.
+2026-08-27T20:59:24+01:00 raspberrypi systemd[1]: Started music-game.service - Jogo Musical Raspberry Pi.
+2026-08-27T20:59:25+01:00 raspberrypi uvicorn[1268]: INFO:     Started server process [1268]
+2026-08-27T20:59:25+01:00 raspberrypi uvicorn[1268]: INFO:     Waiting for application startup.
+2026-08-27T20:59:25+01:00 raspberrypi uvicorn[1268]: ERROR:    Traceback (most recent call last):
+2026-08-27T20:59:25+01:00 raspberrypi uvicorn[1268]:   File "/home/user/raspi-music-game/.venv/lib/python3.13/site-packages/gpiozero/pins/pi.py", line 411, in pin
+2026-08-27T20:59:25+01:00 raspberrypi uvicorn[1268]:     pin = self.pins[info]
+2026-08-27T20:59:25+01:00 raspberrypi uvicorn[1268]:           ~~~~~~~~~^^^^^^
+2026-08-27T20:59:25+01:00 raspberrypi uvicorn[1268]: KeyError: PinInfo(number=11, name='GPIO17', names=frozenset({'17', 'GPIO17', 17, 'BOARD11', 'BCM17', 'WPI0', 'J8:11'}), pull='', row=6, col=1, interfaces=frozenset({'', 'gpio', 'uart', 'dpi', 'spi'}))
+2026-08-27T20:59:25+01:00 raspberrypi uvicorn[1268]: During handling of the above exception, another exception occurred:
+2026-08-27T20:59:25+01:00 raspberrypi uvicorn[1268]: Traceback (most recent call last):
+2026-08-27T20:59:25+01:00 raspberrypi uvicorn[1268]:   File "/home/user/raspi-music-game/.venv/lib/python3.13/site-packages/starlette/routing.py", line 694, in lifespan
+2026-08-27T20:59:25+01:00 raspberrypi uvicorn[1268]:     async with self.lifespan_context(app) as maybe_state:
+2026-08-27T20:59:25+01:00 raspberrypi uvicorn[1268]:                ~~~~~~~~~~~~~~~~~~~~~^^^^^
+2026-08-27T20:59:25+01:00 raspberrypi uvicorn[1268]:   File "/usr/lib/python3.13/contextlib.py", line 214, in __aenter__
+2026-08-27T20:59:25+01:00 raspberrypi uvicorn[1268]:     return await anext(self.gen)
+2026-08-27T20:59:25+01:00 raspberrypi uvicorn[1268]:            ^^^^^^^^^^^^^^^^^^^^^
+2026-08-27T20:59:25+01:00 raspberrypi uvicorn[1268]:   File "/home/user/raspi-music-game/backend/main.py", line 51, in lifespan
+2026-08-27T20:59:25+01:00 raspberrypi uvicorn[1268]:     await hardware.start(engine.press)
+2026-08-27T20:59:25+01:00 raspberrypi uvicorn[1268]:   File "/home/user/raspi-music-game/backend/hardware.py", line 114, in start
+2026-08-27T20:59:25+01:00 raspberrypi uvicorn[1268]:     Button(
+2026-08-27T20:59:25+01:00 raspberrypi uvicorn[1268]:     ~~~~~~^
+2026-08-27T20:59:25+01:00 raspberrypi uvicorn[1268]:         gpio,
+2026-08-27T20:59:25+01:00 raspberrypi uvicorn[1268]:         ^^^^^
+2026-08-27T20:59:25+01:00 raspberrypi uvicorn[1268]:         pull_up=True,
+2026-08-27T20:59:25+01:00 raspberrypi uvicorn[1268]:         ^^^^^^^^^^^^^
+2026-08-27T20:59:25+01:00 raspberrypi uvicorn[1268]:         bounce_time=self.debounce_seconds,
+2026-08-27T20:59:25+01:00 raspberrypi uvicorn[1268]:         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-27T20:59:25+01:00 raspberrypi uvicorn[1268]:     )
+2026-08-27T20:59:25+01:00 raspberrypi uvicorn[1268]:     ^
+2026-08-27T20:59:25+01:00 raspberrypi uvicorn[1268]:   File "/home/user/raspi-music-game/.venv/lib/python3.13/site-packages/gpiozero/devices.py", line 108, in __call__
+2026-08-27T20:59:25+01:00 raspberrypi uvicorn[1268]:     self = super().__call__(*args, **kwargs)
+2026-08-27T20:59:25+01:00 raspberrypi uvicorn[1268]:   File "/home/user/raspi-music-game/.venv/lib/python3.13/site-packages/gpiozero/input_devices.py", line 412, in __init__
+2026-08-27T20:59:25+01:00 raspberrypi uvicorn[1268]:     super().__init__(
+2026-08-27T20:59:25+01:00 raspberrypi uvicorn[1268]:     ~~~~~~~~~~~~~~~~^
+2026-08-27T20:59:25+01:00 raspberrypi uvicorn[1268]:         pin, pull_up=pull_up, active_state=active_state,
+2026-08-27T20:59:25+01:00 raspberrypi uvicorn[1268]:         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-27T20:59:25+01:00 raspberrypi uvicorn[1268]:         bounce_time=bounce_time, pin_factory=pin_factory)
+2026-08-27T20:59:25+01:00 raspberrypi uvicorn[1268]:         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-27T20:59:25+01:00 raspberrypi uvicorn[1268]:   File "/home/user/raspi-music-game/.venv/lib/python3.13/site-packages/gpiozero/mixins.py", line 417, in __init__
+2026-08-27T20:59:25+01:00 raspberrypi uvicorn[1268]:     super().__init__(*args, **kwargs)
+2026-08-27T20:59:25+01:00 raspberrypi uvicorn[1268]:     ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+2026-08-27T20:59:25+01:00 raspberrypi uvicorn[1268]:   File "/home/user/raspi-music-game/.venv/lib/python3.13/site-packages/gpiozero/input_devices.py", line 162, in __init__
+2026-08-27T20:59:25+01:00 raspberrypi uvicorn[1268]:     super().__init__(
+2026-08-27T20:59:25+01:00 raspberrypi uvicorn[1268]:     ~~~~~~~~~~~~~~~~^
+2026-08-27T20:59:25+01:00 raspberrypi uvicorn[1268]:         pin, pull_up=pull_up, active_state=active_state,
+2026-08-27T20:59:25+01:00 raspberrypi uvicorn[1268]:         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-27T20:59:25+01:00 raspberrypi uvicorn[1268]:         pin_factory=pin_factory)
+2026-08-27T20:59:25+01:00 raspberrypi uvicorn[1268]:         ^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-27T20:59:25+01:00 raspberrypi uvicorn[1268]:   File "/home/user/raspi-music-game/.venv/lib/python3.13/site-packages/gpiozero/mixins.py", line 243, in __init__
+2026-08-27T20:59:25+01:00 raspberrypi uvicorn[1268]:     super().__init__(*args, **kwargs)
+2026-08-27T20:59:25+01:00 raspberrypi uvicorn[1268]:     ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+2026-08-27T20:59:25+01:00 raspberrypi uvicorn[1268]:   File "/home/user/raspi-music-game/.venv/lib/python3.13/site-packages/gpiozero/input_devices.py", line 79, in __init__
+2026-08-27T20:59:25+01:00 raspberrypi uvicorn[1268]:     super().__init__(pin, pin_factory=pin_factory)
+2026-08-27T20:59:25+01:00 raspberrypi uvicorn[1268]:     ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-27T20:59:25+01:00 raspberrypi uvicorn[1268]:   File "/home/user/raspi-music-game/.venv/lib/python3.13/site-packages/gpiozero/devices.py", line 553, in __init__
+2026-08-27T20:59:25+01:00 raspberrypi uvicorn[1268]:     pin = self.pin_factory.pin(pin)
+2026-08-27T20:59:25+01:00 raspberrypi uvicorn[1268]:   File "/home/user/raspi-music-game/.venv/lib/python3.13/site-packages/gpiozero/pins/pi.py", line 413, in pin
+2026-08-27T20:59:25+01:00 raspberrypi uvicorn[1268]:     pin = self.pin_class(self, info)
+2026-08-27T20:59:25+01:00 raspberrypi uvicorn[1268]:   File "/home/user/raspi-music-game/.venv/lib/python3.13/site-packages/gpiozero/pins/lgpio.py", line 126, in __init__
+2026-08-27T20:59:25+01:00 raspberrypi uvicorn[1268]:     lgpio.gpio_claim_input(
+2026-08-27T20:59:25+01:00 raspberrypi uvicorn[1268]:     ~~~~~~~~~~~~~~~~~~~~~~^
+2026-08-27T20:59:25+01:00 raspberrypi uvicorn[1268]:         self.factory._handle, self._number, lgpio.SET_PULL_NONE)
+2026-08-27T20:59:25+01:00 raspberrypi uvicorn[1268]:         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-27T20:59:25+01:00 raspberrypi uvicorn[1268]:   File "/home/user/raspi-music-game/.venv/lib/python3.13/site-packages/lgpio.py", line 755, in gpio_claim_input
+2026-08-27T20:59:25+01:00 raspberrypi uvicorn[1268]:     return _u2i(_lgpio._gpio_claim_input(handle&0xffff, lFlags, gpio))
+2026-08-27T20:59:25+01:00 raspberrypi uvicorn[1268]:   File "/home/user/raspi-music-game/.venv/lib/python3.13/site-packages/lgpio.py", line 458, in _u2i
+2026-08-27T20:59:25+01:00 raspberrypi uvicorn[1268]:     raise error(error_text(v))
+2026-08-27T20:59:25+01:00 raspberrypi uvicorn[1268]: lgpio.error: 'GPIO busy'
+2026-08-27T20:59:25+01:00 raspberrypi uvicorn[1268]: ERROR:    Application startup failed. Exiting.
+2026-08-27T20:59:25+01:00 raspberrypi systemd[1]: music-game.service: Main process exited, code=exited, status=3/NOTIMPLEMENTED
+2026-08-27T20:59:25+01:00 raspberrypi systemd[1]: music-game.service: Failed with result 'exit-code'.
+2026-08-27T20:59:28+01:00 raspberrypi systemd[1]: music-game.service: Scheduled restart job, restart counter is at 22.
+2026-08-27T20:59:28+01:00 raspberrypi systemd[1]: Started music-game.service - Jogo Musical Raspberry Pi.
+2026-08-27T20:59:29+01:00 raspberrypi uvicorn[1277]: INFO:     Started server process [1277]
+2026-08-27T20:59:29+01:00 raspberrypi uvicorn[1277]: INFO:     Waiting for application startup.
+2026-08-27T20:59:29+01:00 raspberrypi uvicorn[1277]: ERROR:    Traceback (most recent call last):
+2026-08-27T20:59:29+01:00 raspberrypi uvicorn[1277]:   File "/home/user/raspi-music-game/.venv/lib/python3.13/site-packages/gpiozero/pins/pi.py", line 411, in pin
+2026-08-27T20:59:29+01:00 raspberrypi uvicorn[1277]:     pin = self.pins[info]
+2026-08-27T20:59:29+01:00 raspberrypi uvicorn[1277]:           ~~~~~~~~~^^^^^^
+2026-08-27T20:59:29+01:00 raspberrypi uvicorn[1277]: KeyError: PinInfo(number=11, name='GPIO17', names=frozenset({'J8:11', 17, 'GPIO17', 'BOARD11', '17', 'BCM17', 'WPI0'}), pull='', row=6, col=1, interfaces=frozenset({'', 'gpio', 'uart', 'spi', 'dpi'}))
+2026-08-27T20:59:29+01:00 raspberrypi uvicorn[1277]: During handling of the above exception, another exception occurred:
+2026-08-27T20:59:29+01:00 raspberrypi uvicorn[1277]: Traceback (most recent call last):
+2026-08-27T20:59:29+01:00 raspberrypi uvicorn[1277]:   File "/home/user/raspi-music-game/.venv/lib/python3.13/site-packages/starlette/routing.py", line 694, in lifespan
+2026-08-27T20:59:29+01:00 raspberrypi uvicorn[1277]:     async with self.lifespan_context(app) as maybe_state:
+2026-08-27T20:59:29+01:00 raspberrypi uvicorn[1277]:                ~~~~~~~~~~~~~~~~~~~~~^^^^^
+2026-08-27T20:59:29+01:00 raspberrypi uvicorn[1277]:   File "/usr/lib/python3.13/contextlib.py", line 214, in __aenter__
+2026-08-27T20:59:29+01:00 raspberrypi uvicorn[1277]:     return await anext(self.gen)
+2026-08-27T20:59:29+01:00 raspberrypi uvicorn[1277]:            ^^^^^^^^^^^^^^^^^^^^^
+2026-08-27T20:59:29+01:00 raspberrypi uvicorn[1277]:   File "/home/user/raspi-music-game/backend/main.py", line 51, in lifespan
+2026-08-27T20:59:29+01:00 raspberrypi uvicorn[1277]:     await hardware.start(engine.press)
+2026-08-27T20:59:29+01:00 raspberrypi uvicorn[1277]:   File "/home/user/raspi-music-game/backend/hardware.py", line 114, in start
+2026-08-27T20:59:29+01:00 raspberrypi uvicorn[1277]:     Button(
+2026-08-27T20:59:29+01:00 raspberrypi uvicorn[1277]:     ~~~~~~^
+2026-08-27T20:59:29+01:00 raspberrypi uvicorn[1277]:         gpio,
+2026-08-27T20:59:29+01:00 raspberrypi uvicorn[1277]:         ^^^^^
+2026-08-27T20:59:29+01:00 raspberrypi uvicorn[1277]:         pull_up=True,
+2026-08-27T20:59:29+01:00 raspberrypi uvicorn[1277]:         ^^^^^^^^^^^^^
+2026-08-27T20:59:29+01:00 raspberrypi uvicorn[1277]:         bounce_time=self.debounce_seconds,
+2026-08-27T20:59:29+01:00 raspberrypi uvicorn[1277]:         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-27T20:59:29+01:00 raspberrypi uvicorn[1277]:     )
+2026-08-27T20:59:29+01:00 raspberrypi uvicorn[1277]:     ^
+2026-08-27T20:59:29+01:00 raspberrypi uvicorn[1277]:   File "/home/user/raspi-music-game/.venv/lib/python3.13/site-packages/gpiozero/devices.py", line 108, in __call__
+2026-08-27T20:59:29+01:00 raspberrypi uvicorn[1277]:     self = super().__call__(*args, **kwargs)
+2026-08-27T20:59:29+01:00 raspberrypi uvicorn[1277]:   File "/home/user/raspi-music-game/.venv/lib/python3.13/site-packages/gpiozero/input_devices.py", line 412, in __init__
+2026-08-27T20:59:29+01:00 raspberrypi uvicorn[1277]:     super().__init__(
+2026-08-27T20:59:29+01:00 raspberrypi uvicorn[1277]:     ~~~~~~~~~~~~~~~~^
+2026-08-27T20:59:29+01:00 raspberrypi uvicorn[1277]:         pin, pull_up=pull_up, active_state=active_state,
+2026-08-27T20:59:29+01:00 raspberrypi uvicorn[1277]:         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-27T20:59:29+01:00 raspberrypi uvicorn[1277]:         bounce_time=bounce_time, pin_factory=pin_factory)
+2026-08-27T20:59:29+01:00 raspberrypi uvicorn[1277]:         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-27T20:59:29+01:00 raspberrypi uvicorn[1277]:   File "/home/user/raspi-music-game/.venv/lib/python3.13/site-packages/gpiozero/mixins.py", line 417, in __init__
+2026-08-27T20:59:29+01:00 raspberrypi uvicorn[1277]:     super().__init__(*args, **kwargs)
+2026-08-27T20:59:29+01:00 raspberrypi uvicorn[1277]:     ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+2026-08-27T20:59:29+01:00 raspberrypi uvicorn[1277]:   File "/home/user/raspi-music-game/.venv/lib/python3.13/site-packages/gpiozero/input_devices.py", line 162, in __init__
+2026-08-27T20:59:29+01:00 raspberrypi uvicorn[1277]:     super().__init__(
+2026-08-27T20:59:29+01:00 raspberrypi uvicorn[1277]:     ~~~~~~~~~~~~~~~~^
+2026-08-27T20:59:29+01:00 raspberrypi uvicorn[1277]:         pin, pull_up=pull_up, active_state=active_state,
+2026-08-27T20:59:29+01:00 raspberrypi uvicorn[1277]:         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-27T20:59:29+01:00 raspberrypi uvicorn[1277]:         pin_factory=pin_factory)
+2026-08-27T20:59:29+01:00 raspberrypi uvicorn[1277]:         ^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-27T20:59:29+01:00 raspberrypi uvicorn[1277]:   File "/home/user/raspi-music-game/.venv/lib/python3.13/site-packages/gpiozero/mixins.py", line 243, in __init__
+2026-08-27T20:59:29+01:00 raspberrypi uvicorn[1277]:     super().__init__(*args, **kwargs)
+2026-08-27T20:59:29+01:00 raspberrypi uvicorn[1277]:     ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+2026-08-27T20:59:29+01:00 raspberrypi uvicorn[1277]:   File "/home/user/raspi-music-game/.venv/lib/python3.13/site-packages/gpiozero/input_devices.py", line 79, in __init__
+2026-08-27T20:59:29+01:00 raspberrypi uvicorn[1277]:     super().__init__(pin, pin_factory=pin_factory)
+2026-08-27T20:59:29+01:00 raspberrypi uvicorn[1277]:     ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-27T20:59:29+01:00 raspberrypi uvicorn[1277]:   File "/home/user/raspi-music-game/.venv/lib/python3.13/site-packages/gpiozero/devices.py", line 553, in __init__
+2026-08-27T20:59:29+01:00 raspberrypi uvicorn[1277]:     pin = self.pin_factory.pin(pin)
+2026-08-27T20:59:29+01:00 raspberrypi uvicorn[1277]:   File "/home/user/raspi-music-game/.venv/lib/python3.13/site-packages/gpiozero/pins/pi.py", line 413, in pin
+2026-08-27T20:59:29+01:00 raspberrypi uvicorn[1277]:     pin = self.pin_class(self, info)
+2026-08-27T20:59:29+01:00 raspberrypi uvicorn[1277]:   File "/home/user/raspi-music-game/.venv/lib/python3.13/site-packages/gpiozero/pins/lgpio.py", line 126, in __init__
+2026-08-27T20:59:29+01:00 raspberrypi uvicorn[1277]:     lgpio.gpio_claim_input(
+2026-08-27T20:59:29+01:00 raspberrypi uvicorn[1277]:     ~~~~~~~~~~~~~~~~~~~~~~^
+2026-08-27T20:59:29+01:00 raspberrypi uvicorn[1277]:         self.factory._handle, self._number, lgpio.SET_PULL_NONE)
+2026-08-27T20:59:29+01:00 raspberrypi uvicorn[1277]:         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-27T20:59:29+01:00 raspberrypi uvicorn[1277]:   File "/home/user/raspi-music-game/.venv/lib/python3.13/site-packages/lgpio.py", line 755, in gpio_claim_input
+2026-08-27T20:59:29+01:00 raspberrypi uvicorn[1277]:     return _u2i(_lgpio._gpio_claim_input(handle&0xffff, lFlags, gpio))
+2026-08-27T20:59:29+01:00 raspberrypi uvicorn[1277]:   File "/home/user/raspi-music-game/.venv/lib/python3.13/site-packages/lgpio.py", line 458, in _u2i
+2026-08-27T20:59:29+01:00 raspberrypi uvicorn[1277]:     raise error(error_text(v))
+2026-08-27T20:59:29+01:00 raspberrypi uvicorn[1277]: lgpio.error: 'GPIO busy'
+2026-08-27T20:59:29+01:00 raspberrypi uvicorn[1277]: ERROR:    Application startup failed. Exiting.
+2026-08-27T20:59:29+01:00 raspberrypi systemd[1]: music-game.service: Main process exited, code=exited, status=3/NOTIMPLEMENTED
+2026-08-27T20:59:29+01:00 raspberrypi systemd[1]: music-game.service: Failed with result 'exit-code'.
+2026-08-27T20:59:32+01:00 raspberrypi systemd[1]: Stopped music-game.service - Jogo Musical Raspberry Pi.
+2026-08-27T21:00:40+01:00 raspberrypi systemd[1]: Started music-game.service - Jogo Musical Raspberry Pi.
+2026-08-27T21:00:40+01:00 raspberrypi uvicorn[1300]: INFO:     Started server process [1300]
+2026-08-27T21:00:40+01:00 raspberrypi uvicorn[1300]: INFO:     Waiting for application startup.
+2026-08-27T21:00:40+01:00 raspberrypi uvicorn[1300]: INFO:     Application startup complete.
+2026-08-27T21:00:40+01:00 raspberrypi uvicorn[1300]: INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+2026-08-27T21:07:07+01:00 raspberrypi uvicorn[1300]: INFO:     127.0.0.1:33474 - "GET /api/health HTTP/1.1" 200 OK
+
+============================================================
+USUÃRIO, GRUPOS E PERMISSÃ•ES
+============================================================
+uid=1000(user) gid=1000(user) groups=1000(user),4(adm),20(dialout),24(cdrom),27(sudo),29(audio),44(video),46(plugdev),60(games),100(users),996(input),992(render),102(netdev),989(spi),988(i2c),986(gpio)
+gpio:x:986:user
+spi:x:989:user
+f: /home/user/raspi-music-game
+drwxr-xr-x root root /
+drwxr-xr-x root root home
+drwx------ user user user
+drwxr-xr-x user user raspi-music-game
+drwxr-xr-x 11 user user 4096 Aug 27 21:07 /home/user/raspi-music-game
+drwxr-xr-x  5 user user 4096 Aug 27 19:05 /home/user/raspi-music-game/.venv
+   294118      0 prw-rw-r--   1 user     user            0 Aug 27 21:05 /home/user/raspi-music-game/.lgd-nfy0
+
+============================================================
+DISPOSITIVOS GPIO E SPI
+============================================================
+crw-rw---- 1 root gpio 254,  0 Aug 27 20:21 /dev/gpiochip0
+crw-rw---- 1 root gpio 254, 10 Aug 27 20:21 /dev/gpiochip10
+crw-rw---- 1 root gpio 254, 11 Aug 27 20:21 /dev/gpiochip11
+crw-rw---- 1 root gpio 254, 12 Aug 27 20:21 /dev/gpiochip12
+crw-rw---- 1 root gpio 254, 13 Aug 27 20:21 /dev/gpiochip13
+lrwxrwxrwx 1 root root       9 Aug 27 20:21 /dev/gpiochip4 -> gpiochip0
+crw-rw---- 1 root gpio 235,  0 Aug 27 20:21 /dev/gpiomem0
+crw-rw---- 1 root gpio 239,  0 Aug 27 20:21 /dev/gpiomem1
+crw-rw---- 1 root gpio 238,  0 Aug 27 20:21 /dev/gpiomem2
+crw-rw---- 1 root gpio 237,  0 Aug 27 20:21 /dev/gpiomem3
+crw-rw---- 1 root gpio 236,  0 Aug 27 20:21 /dev/gpiomem4
+crw-rw---- 1 root spi  153,  0 Aug 27 20:21 /dev/spidev0.0
+crw-rw---- 1 root spi  153,  1 Aug 27 20:21 /dev/spidev0.1
+crw-rw---- 1 root spi  153,  2 Aug 27 20:21 /dev/spidev10.0
+total 0
+lrwxrwxrwx 1 root root 0 Aug 27 20:21 spidev0.0 -> ../../devices/platform/axi/1000120000.pcie/1f00050000.spi/spi_master/spi0/spi0.0/spidev/spidev0.0
+lrwxrwxrwx 1 root root 0 Aug 27 20:21 spidev0.1 -> ../../devices/platform/axi/1000120000.pcie/1f00050000.spi/spi_master/spi0/spi0.1/spidev/spidev0.1
+lrwxrwxrwx 1 root root 0 Aug 27 20:21 spidev10.0 -> ../../devices/platform/soc@107c000000/107d004000.spi/spi_master/spi10/spi10.0/spidev/spidev10.0
+/sys/class/spidev/spidev0.0 -> /sys/devices/platform/axi/1000120000.pcie/1f00050000.spi/spi_master/spi0/spi0.0/spidev/spidev0.0
+/sys/class/spidev/spidev0.1 -> /sys/devices/platform/axi/1000120000.pcie/1f00050000.spi/spi_master/spi0/spi0.1/spidev/spidev0.1
+/sys/class/spidev/spidev10.0 -> /sys/devices/platform/soc@107c000000/107d004000.spi/spi_master/spi10/spi10.0/spidev/spidev10.0
+0
+/boot/firmware/config.txt:8:dtparam=spi=on
+raspberrypi_gpiomem    49152  0
+spidev                 49152  2
+gpio_keys              49152  0
+spi_bcm2835            49152  0
+spi_dw_mmio            49152  0
+spi_dw                 49152  1 spi_dw_mmio
+
+============================================================
+PROCESSOS USANDO GPIO/SPI
+============================================================
+1300 /home/user/raspi-music-game/.venv/bin/python3 /home/user/raspi-music-game/.venv/bin/uvicorn backend.main:app --host 0.0.0.0 --port 8000
+                     USER        PID ACCESS COMMAND
+/dev/gpiochip0:      user       1300 F.... uvicorn
+/dev/spidev0.0:      user       1300 F.... uvicorn
+
+============================================================
+ESTADO DOS PINOS BCM
+============================================================
+ 5: ip    pu | hi // GPIO5 = input
+ 6: ip    pu | hi // GPIO6 = input
+10: a0    pn | hi // GPIO10 = SPI0_MOSI
+12: ip    pu | hi // GPIO12 = input
+16: ip    pu | hi // GPIO16 = input
+17: ip    pu | hi // GPIO17 = input
+18: ip    pu | hi // GPIO18 = input
+22: ip    pu | hi // GPIO22 = input
+25: ip    pu | hi // GPIO25 = input
+26: ip    pu | hi // GPIO26 = input
+27: ip    pu | hi // GPIO27 = input
+
+============================================================
+INFORMAÃ‡Ã•ES DO GPIOCHIP
+============================================================
+gpioinfo: cannot find line 'gpiochip0'
+gpioinfo: cannot find line '/dev/gpiochip0'
+
+============================================================
+VERSÃ•ES PYTHON DO PROJETO
+============================================================
+ExecutÃ¡vel: /home/user/raspi-music-game/.venv/bin/python
+Python: 3.13.5
+Plataforma: Linux-6.12.75+rpt-rpi-2712-aarch64-with-glibc2.41
+fastapi: 0.116.1
+uvicorn: 0.35.0
+numpy: 2.2.6
+gpiozero: 2.0.1
+lgpio: 0.2.2.0
+spidev: 3.8
+Pi5Neo: 1.1.0
+
+============================================================
+ARQUIVOS PRINCIPAIS
+============================================================
+0b89a138e9069d80b7bdc3c5e12767984fd3074b687fa4eb8a825ed65503d494  /home/user/raspi-music-game/backend/hardware.py
+013224422fdaa51de9064014533d5052f8c3bcd4f0170b79d81b6005cc4f1146  /home/user/raspi-music-game/backend/main.py
+7414390f9608f84bc3ed8b8efb289e2d101ccad4acc1b94ae3193a744afc459c  /home/user/raspi-music-game/test-hardware.py
+
+============================================================
+FIM
+============================================================
+DiagnÃ³stico salvo em: /home/user/raspi-music-game/diagnostico-hardware.txt
